@@ -1,5 +1,6 @@
 {
   "name": "fotostrana/php-sdk",
+  "type": "library",
   "description": "description",
   "authors": [
     {
