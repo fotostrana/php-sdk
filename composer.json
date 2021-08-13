@@ -1,0 +1,24 @@
+{
+  "name": "fotostrana/php-sdk",
+  "description": "description",
+  "authors": [
+    {
+      "name": "PetrovDA88",
+      "email": "d.petrov@playform.com"
+    }
+  ],
+  "license": "proprietary",
+  "minimum-stability": "stable",
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/fotostrana/php-sdk"
+    }
+  ],
+  "require": {
+    "php": ">=7.0"
+  },
+  "autoload": {
+    "psr-4": { "Fotostrana\\": "src/Fotostrana"}
+  }
+}

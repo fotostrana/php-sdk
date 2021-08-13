@@ -1,0 +1,9 @@
+/.idea
+/vendor
+/composer.lock
+/nginx
+/.env
+/docker-compose.yml
+/Dockerfile
+/src/Fotostrana/Request/cache/
+/src/Fotostrana/Request/log/
