@@ -21,7 +21,7 @@ class RequestCounter
 
     public static function removeQuery($t)
     {
-        unset(self::$queries[$t]);
+        unset (self::$queries[$t]);
     }
 
     public static function countQueries()

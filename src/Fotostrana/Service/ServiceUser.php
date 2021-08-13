@@ -22,7 +22,134 @@ class ServiceUser extends ServiceAbstract
             'User.getProfiles',
             [
                 EnumsProtocol::USER_IDS => $userId,
-                EnumsProtocol::FIELDS   => 'user_name,user_lastname,user_link,sex,birthday,photo_small,photo_97,photo_192,photo_big,photo_box,city_id,city_name,slogan,vip_end,is_payable'
+                EnumsProtocol::FIELDS   =>'user_name,time_out,user_is_hidden,user_lastname,user_link,sex,birthday,photo_small,photo_97,photo_192,photo_big,photo_box,city_id,city_name,slogan,vip_end,is_payable'
+            ]
+        );
+    }
+    /**
+     * @param int[] $userIds
+     * @return ModelRequestResponse
+     * @throws ModelError
+     */
+    public function getUsersProfiles(array $userIds) : ModelRequestResponse
+    {
+        return $this->requestFotostranaApi(
+            'User.getProfiles',
+            [
+                EnumsProtocol::USER_IDS => implode(',',$userIds),
+                EnumsProtocol::FIELDS   =>'user_name,time_in,time_out,user_is_hidden,user_lastname,user_link,sex,birthday,photo_small,photo_97,photo_192,photo_big,photo_box,city_id,city_name,slogan,vip_end,is_payable'
+            ]
+        );
+    }
+
+
+    /**
+     * @param int $userId
+     * @return ModelRequestResponse
+     * @throws ModelError
+     */
+    public function getLastOnline(int $userId)
+    {
+        return $this->requestFotostranaApi(
+            'User.lastOnline',
+            [
+                EnumsProtocol::USER_IDS => $userId,
+            ]
+        );
+    }
+
+    /**
+     * @param array $userIds
+     * @return ModelRequestResponse
+     * @throws ModelError
+     */
+    public function getLastOnlineArray(array $userIds)
+    {
+        return $this->requestFotostranaApi(
+            'User.lastOnline',
+            [
+                EnumsProtocol::USER_IDS => implode(',',$userIds),
+            ]
+        );
+    }
+
+    /**
+     * @param int $userId
+     * @return ModelRequestResponse
+     * @throws ModelError
+     */
+    public function isOnline(int $userId) : ModelRequestResponse
+    {
+        return $this->requestFotostranaApi(
+            'User.isOnline',
+            [
+                EnumsProtocol::USER_IDS => $userId,
+            ]
+        );
+    }
+
+    /**
+     * @param int $userId
+     * @return ModelRequestResponse
+     * @throws ModelError
+     */
+    public function getUserBlackList(int $userId) : ModelRequestResponse
+    {
+        return $this->requestFotostranaApi(
+            'User.blackList', [EnumsProtocol::USER_IDS => $userId,]
+        );
+    }
+
+    public function getUserInterests(int $userId)
+    {
+        return $this->requestFotostranaApi(
+            'User.interests',
+            [EnumsProtocol::USER_ID => $userId,]
+        );
+    }
+
+    public function getUserNewGuests(int $userId)
+    {
+        return $this->requestFotostranaApi(
+            'User.newGuests',
+            [EnumsProtocol::USER_ID => $userId,]
+        );
+    }
+
+    public function getUsersHolidays(array $userIds)
+    {
+        return $this->requestFotostranaApi(
+            'User.holidays',
+            [EnumsProtocol::USER_IDS => implode(',', $userIds),]
+        );
+    }
+
+    /**
+     * @param array $userIds
+     * @return ModelRequestResponse
+     * @throws ModelError
+     */
+    public function getUsersBlackList(array $userIds) : ModelRequestResponse
+    {
+        return $this->requestFotostranaApi(
+            'User.blackList',
+            [
+                EnumsProtocol::USER_IDS => implode(',', $userIds),
+            ]
+        );
+    }
+
+    /**
+     * @param array $userIds
+     * @return ModelRequestResponse
+     * @throws ModelError
+     */
+    public function areUsersOnline(array $userIds) : ModelRequestResponse
+    {
+        return $this->requestFotostranaApi(
+            'User.isOnline',
+            [
+                EnumsProtocol::USER_IDS => implode(',',$userIds),
             ]
         );
     }
@@ -35,8 +162,7 @@ class ServiceUser extends ServiceAbstract
     function getRegistrationDate(int $userId) : ModelRequestResponse
     {
         return $this->requestFotostranaApi(
-            'User.getRegistrationDate',
-            [EnumsProtocol::USER_ID => $userId]
+            'User.getRegistrationDate', [EnumsProtocol::USER_ID => $userId]
         );
     }
 
@@ -48,8 +174,7 @@ class ServiceUser extends ServiceAbstract
     function getFriendsIds(int $userId) : ModelRequestResponse
     {
         return $this->requestFotostranaApi(
-            'User.getFriendsAny',
-            [EnumsProtocol::USER_ID => $userId]
+            'User.getFriendsAny', [EnumsProtocol::USER_ID => $userId]
         );
     }
 
@@ -61,8 +186,7 @@ class ServiceUser extends ServiceAbstract
     function getIsAppInstall(int $userId) : ModelRequestResponse
     {
         return $this->requestFotostranaApi(
-            'User.isAppWidgetUser',
-            [EnumsProtocol::USER_ID => $userId]
+            'User.isAppWidgetUser', [EnumsProtocol::USER_ID => $userId]
         );
     }
 
@@ -74,8 +198,7 @@ class ServiceUser extends ServiceAbstract
     function getUserSettings(int $userId) : ModelRequestResponse
     {
         return $this->requestFotostranaApi(
-            'User.getUserSettingsAny',
-            [EnumsProtocol::USER_ID => $userId]
+            'User.getUserSettingsAny', [EnumsProtocol::USER_ID, $userId]
         );
     }
 

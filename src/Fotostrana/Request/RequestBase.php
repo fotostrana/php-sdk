@@ -115,7 +115,6 @@ class RequestBase
 
     private function runRequest()
     {
-        // ������� ������
         $r = new SubRequest($this->authParams);
         $p = array_merge($this->params, array('method' => $this->method));
 

@@ -7,9 +7,14 @@ namespace Fotostrana\Model;
 use Fotostrana\Enums\EnumsConfig;
 use Fotostrana\Enums\EnumsProtocol;
 use Fotostrana\Interfaces\IError;
+use Fotostrana\Model\ModelError;
 
 class ModelAuth implements IError
 {
+    /**
+     * @var ModelAuth
+     */
+
     private $sessionKey;
     private $viewerId;
     private $authKey;

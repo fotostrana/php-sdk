@@ -61,11 +61,12 @@ class RequestCache
         return md5(serialize($params));
     }
 
-    private function encryptData($data) {
+    private function encryptData($data)
+    {
         return serialize($data);
     }
-
-    private function decryptData($data) {
+    private function decryptData($data)
+    {
         return unserialize($data);
     }
 
