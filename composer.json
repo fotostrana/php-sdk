@@ -7,7 +7,7 @@
       "email": "d.petrov@playform.com"
     }
   ],
-  "license": "proprietary",
+  "license": "MIT",
   "minimum-stability": "stable",
   "repositories": [
     {
