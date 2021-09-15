@@ -183,10 +183,22 @@ class ServiceUser extends ServiceAbstract
      * @return ModelRequestResponse
      * @throws ModelError
      */
-    function getIsAppInstall(int $userId) : ModelRequestResponse
+    function isUserAppInstalled(int $userId) : ModelRequestResponse
     {
         return $this->requestFotostranaApi(
-            'User.isAppWidgetUser', [EnumsProtocol::USER_ID => $userId]
+            'User.isAppInstalled', [EnumsProtocol::USER_IDS => $userId]
+        );
+    }
+
+    /**
+     * @param int[] $userIds
+     * @return ModelRequestResponse
+     * @throws ModelError
+     */
+    function areUsersAppInstalled(array $userIds) : ModelRequestResponse
+    {
+        return $this->requestFotostranaApi(
+            'User.isAppInstalled', [EnumsProtocol::USER_IDS => implode(',', $userIds)]
         );
     }
 
