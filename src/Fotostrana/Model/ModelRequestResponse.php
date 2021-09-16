@@ -25,7 +25,8 @@ class ModelRequestResponse implements IError
                 throw new ModelError('API Request error', 'Error: ' . (isset($this->error['error_subcode']) ? $this->error['error_subcode'] . ' (subcode)' : $this->error['error_code'] . ' (code)') . ': ' . $this->error['error_msg']);
             }
 
-            if (!$this->data = $decodedData[EnumsProtocol::RESPONSE] ?? null) {
+            $this->data = $decodedData[EnumsProtocol::RESPONSE] ?? null;
+            if ($this->data === null) {
                 throw new ModelError('API Request error', 'Invalid API response: no response field');
             }
 
