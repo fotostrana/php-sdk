@@ -132,8 +132,7 @@ class RequestBase
         RequestCounter::addQuery();
         RequestCounter::wait();
 
-        $url = $r->makeApiRequestUrl($p);
-
+        list($url, $this->params) = $r->prepareApiRequest($p, $this->mode);
         if (EnumsConfig::FOTOSTRANA_DEBUG) {
             echo "Fetching URL " . htmlspecialchars($url) . " by " . $this->mode . "<br>\n";
         }

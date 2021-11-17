@@ -24,5 +24,6 @@ class EnumsProtocol
         FORMAT      = 'format',
         TIMESTAMP   = 'timestamp',
         ERROR       = 'error',
+        SIG         = 'sig',
         RESPONSE    = 'response';
 }

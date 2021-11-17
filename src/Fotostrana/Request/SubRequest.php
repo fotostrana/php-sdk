@@ -42,12 +42,12 @@ class SubRequest
         {
             if ($k && $v) {
                 $p_string .= is_array($v) ? str_replace('&', '', urldecode(http_build_query([$k => $v])))
-                                          : $k . '=' . $v;
+                                              : $k . '=' . $v;
             }
         }
 
         $p_string .= in_array($params['method'], $this->server_methods) ? EnumsConfig::FOTOSTRANA_SERVERKEY
-                                                                        : EnumsConfig::FOTOSTRANA_CLIENTKEY;
+                                                                                      : EnumsConfig::FOTOSTRANA_CLIENTKEY;
 
         if (EnumsConfig::FOTOSTRANA_DEBUG) {
             echo "p_string: " . $p_string . "<br/><br/>\n";
@@ -59,16 +59,58 @@ class SubRequest
     function urlencodeArray($params)
     {
         $res = array();
-        foreach ($params as $key => $value)
-        {
+        foreach ($params as $key => $value) {
             $res[$key] = is_array($value) ? $this->urlencodeArray($value)
-                                          : urlencode($value);
+                                              : urlencode($value);
         }
         return $res;
     }
 
-    function makeApiRequestUrl(array $params) {
+    /**
+     * @param array $params
+     * @param string $mode EnumsProtocol::HTTP_QUERY_*
+     * @return array [string api.url, array params for request]
+     */
+    function prepareApiRequest(array $params, string $mode)
+    {
+        switch ($mode)
+        {
+            case EnumsProtocol::HTTP_QUERY_POST:
+                return $this->preparePOST($params);
+            default:
+                return $this->prepareGET($params);
+        }
+    }
 
+    private function preparePOST(array $params)
+    {
+        $paramsForSig = [
+            EnumsProtocol::APP_ID => EnumsConfig::FOTOSTRANA_APPID,
+            EnumsProtocol::TIMESTAMP => time(),
+            EnumsProtocol::FORMAT => 1,
+            EnumsProtocol::RAND => rand(1,999999),
+            EnumsProtocol::SESSION_KEY => $this->authParams->sessionKey(),
+            EnumsProtocol::VIEWER_ID => $this->authParams->viewerId(),
+            EnumsProtocol::METHOD => $params[EnumsProtocol::METHOD],
+        ];
+
+        ksort($paramsForSig);
+        $sig = $this->makeSig($paramsForSig);
+        $e_params = $this->urlencodeArray($paramsForSig);
+        $url = EnumsConfig::FOTOSTRANA_API_BASEURL . '?' . EnumsProtocol::SIG . '=' . $sig;
+
+        foreach ($e_params as $k => $v) {
+            if ($k && $v) {
+                $url .= is_array($v) ? '&' . urldecode(http_build_query(array($k => $v)))
+                                         : '&' . $k . '=' . $v;
+            }
+        }
+
+        return [$url, $params];
+    }
+
+    private function prepareGET(array $params)
+    {
         if (!array_key_exists(EnumsProtocol::APP_ID, $params)) {
             $params[EnumsProtocol::APP_ID] = EnumsConfig::FOTOSTRANA_APPID;
         }
@@ -91,13 +133,14 @@ class SubRequest
         }
 
         ksort($params);
-        $url = EnumsConfig::FOTOSTRANA_API_BASEURL . '?sig=' . $this->makeSig($params);
-
+        $sig = $this->makeSig($params);
         $e_params = $this->urlencodeArray($params);
+        $url = EnumsConfig::FOTOSTRANA_API_BASEURL . '?' . EnumsProtocol::SIG . '=' . $sig;
+
         foreach ($e_params as $k => $v) {
             if ($k && $v) {
                 $url .= is_array($v) ? '&' . urldecode(http_build_query(array($k => $v)))
-                                     : '&' . $k . '=' . $v;
+                                         : '&' . $k . '=' . $v;
             }
         }
 
@@ -105,8 +148,7 @@ class SubRequest
             echo "URL: " . htmlspecialchars($url) . "<br/><br/>\n";
         }
 
-        return $url;
-
+        return [$url, $e_params];
     }
 
 }
