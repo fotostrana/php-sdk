@@ -7,6 +7,8 @@ use Fotostrana\Model\ModelCreds;
 use Fotostrana\Request\RequestBase;
 
 // Services
+use Fotostrana\Request\RequestCache;
+use Fotostrana\Request\RequestLog;
 use Fotostrana\Service\ServiceUser;
 use Fotostrana\Service\ServiceBilling;
 
@@ -28,10 +30,16 @@ class FotostranaSdk implements IError
     public function __construct(
         string $appId,
         string $serverKey,
-        string $clientKey
+        string $clientKey,
+        string $pathToLog = '',
+        string $pathToCache = ''
     )
     {
+        RequestLog::setLogPath($pathToLog);
+        RequestCache::setCachePath($pathToCache);
+
         new ModelCreds($appId, $serverKey, $clientKey);
+
         $this->selfTest();
         $this->checkAuth();
         $this->flushCache();

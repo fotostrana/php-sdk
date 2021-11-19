@@ -21,14 +21,6 @@ class ServiceAbstract
     }
 
     /**
-     * @return RequestBase
-     */
-    public function getRequestObject()
-    {
-        return $this->request;
-    }
-
-    /**
      * @param string $apiMethod
      * @param array $apiParams
      * @param bool $allowCache

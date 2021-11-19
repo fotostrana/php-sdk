@@ -5,40 +5,40 @@ use Fotostrana\Enums\EnumsConfig;
 
 class RequestCache
 {
-    private $cacheDir;
+    private static $cachePath;
 
-    function __construct()
+    static function setCachePath(string $path)
     {
-        $this->setCacheDir(dirname(__FILE__) . '/cache/');
+        self::$cachePath = $path;
     }
 
-    function setCacheDir(string $path)
+    static function storeCache($params, $data)
     {
-        $this->cacheDir = $path;
-        if (!is_dir($this->cacheDir)) {
-            mkdir($this->cacheDir, 0777, true);
+        if (!self::$cachePath) {
+            return;
         }
-    }
 
-    function storeCache($params, $data)
-    {
-        if ($params) {
-            file_put_contents($this->cacheDir . $this->makeCacheKey($params), $this->encryptData($data));
-            chmod($this->cacheDir . $this->makeCacheKey($params), 0777);
+        if (!$params) {
+            return;
         }
+
+        file_put_contents(
+            self::$cachePath . self::makeCacheKey($params),
+            self::encryptData($data)
+        );
     }
 
     /**
      * @param $params
      * @return mixed|null
      */
-    function loadCache($params)
+    static function loadCache($params)
     {
         if (!$params) {
             return null;
         }
 
-        $f = $this->cacheDir . $this->makeCacheKey($params);
+        $f = self::$cachePath . self::makeCacheKey($params);
         if (!file_exists($f)) {
             return null;
         }
@@ -48,14 +48,14 @@ class RequestCache
             return null;
         }
 
-        return $this->decryptData(file_get_contents($f));
+        return self::decryptData(file_get_contents($f));
     }
 
     /**
      * @param $params
      * @return string
      */
-    private function makeCacheKey($params)
+    private static function makeCacheKey($params)
     {
         if (!$params) {
             return '';
@@ -66,11 +66,11 @@ class RequestCache
         return md5(serialize($params));
     }
 
-    private function encryptData($data)
+    private static function encryptData($data)
     {
         return serialize($data);
     }
-    private function decryptData($data)
+    private static function decryptData($data)
     {
         return unserialize($data);
     }

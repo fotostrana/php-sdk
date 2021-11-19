@@ -19,40 +19,14 @@ class RequestBase
     private $method;
     private $params = [];
     private $resultRaw;
-    private $cache;
     private $cacheAllowed = true;
     private $oldCacheState = null;
-    private $logDir  = '/log/';
-    private $logFileName = 'requests.log';
-    private $logFilePath;
     private $authParams;
 
     function __construct(ModelAuth $authParams)
     {
         $this->authParams = $authParams;
         $this->flushResult();
-        $this->cache = new RequestCache();
-        $this->setLogSettings($this->logDir, $this->logFileName);
-    }
-
-    /**
-     * @return RequestCache
-     */
-    function getCacheObject()
-    {
-        return $this->cache;
-    }
-
-    function setLogSettings(string $logDir, string $fileName)
-    {
-        $this->logDir = dirname(__FILE__) . $logDir;
-        $this->logFileName = $fileName;
-
-        if (!is_dir($this->logDir)) {
-            mkdir($this->logDir, 0777, true);
-        }
-
-        $this->logFilePath = $this->logDir . $this->logFileName;
     }
 
     /**
@@ -130,11 +104,9 @@ class RequestBase
         $r = new SubRequest($this->authParams);
         $p = array_merge($this->params, array('method' => $this->method));
 
-        if ($this->cacheAllowed && $cached_result = $this->cache->loadCache($p)) {
+        if ($this->cacheAllowed && $cached_result = RequestCache::loadCache($p)) {
             $this->resultRaw = $cached_result;
-            if ($this->logFilePath && EnumsConfig::FOTOSTRANA_REQUESTS_LOGGER_ENABLED) {
-                file_put_contents($this->logFilePath, date('r') . ' cache: ' . $this->method . ' ' . serialize($this->params) . ' ' . serialize($cached_result) . "\n\n", FILE_APPEND);
-            }
+            RequestLog::toLog($this->method, $this->params, $this->resultRaw);
             return;
         }
 
@@ -164,12 +136,10 @@ class RequestBase
             curl_close($ch);
         }
 
-        if ($this->logFilePath && EnumsConfig::FOTOSTRANA_REQUESTS_LOGGER_ENABLED) {
-            file_put_contents($this->logFilePath, date('r') . ' request: ' . $this->method . ' ' . serialize($this->params) . ' ' . $this->resultRaw . "\n\n", FILE_APPEND);
-        }
+        RequestLog::toLog($this->method, $this->params, $this->resultRaw);
 
         if ($this->cacheAllowed) {
-            $this->cache->storeCache($p, $this->resultRaw);
+            RequestCache::storeCache($p, $this->resultRaw);
         }
 
         if (EnumsConfig::FOTOSTRANA_DEBUG) {
