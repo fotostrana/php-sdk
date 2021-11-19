@@ -32,15 +32,27 @@ class RequestBase
         $this->authParams = $authParams;
         $this->flushResult();
         $this->cache = new RequestCache();
-        $this->logDir = dirname(__FILE__) . $this->logDir;
+        $this->setLogSettings($this->logDir, $this->logFileName);
+    }
+
+    /**
+     * @return RequestCache
+     */
+    function getCacheObject()
+    {
+        return $this->cache;
+    }
+
+    function setLogSettings(string $logDir, string $fileName)
+    {
+        $this->logDir = dirname(__FILE__) . $logDir;
+        $this->logFileName = $fileName;
 
         if (!is_dir($this->logDir)) {
             mkdir($this->logDir, 0777, true);
         }
 
-        if ($this->logDir) {
-            $this->logFilePath = $this->logDir . $this->logFileName;
-        }
+        $this->logFilePath = $this->logDir . $this->logFileName;
     }
 
     /**

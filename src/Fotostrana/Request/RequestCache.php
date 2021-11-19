@@ -9,7 +9,12 @@ class RequestCache
 
     function __construct()
     {
-        $this->cacheDir = dirname(__FILE__) . '/cache/';
+        $this->setCacheDir(dirname(__FILE__) . '/cache/');
+    }
+
+    function setCacheDir(string $path)
+    {
+        $this->cacheDir = $path;
         if (!is_dir($this->cacheDir)) {
             mkdir($this->cacheDir, 0777, true);
         }
