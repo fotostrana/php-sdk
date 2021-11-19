@@ -22,7 +22,7 @@ class ModelRequestResponse implements IError
             }
 
             if ($decodedData[EnumsProtocol::ERROR] ?? null) {
-                throw new ModelError('API Request error', 'Error: ' . (isset($this->error['error_subcode']) ? $this->error['error_subcode'] . ' (subcode)' : $this->error['error_code'] . ' (code)') . ': ' . $this->error['error_msg']);
+                throw new ModelError('API Request error', 'Error: ' . (isset($decodedData[EnumsProtocol::ERROR]['error_subcode']) ? $decodedData[EnumsProtocol::ERROR]['error_subcode'] . ' (subcode)' : $decodedData[EnumsProtocol::ERROR]['error_code'] . ' (code)') . ': ' . $decodedData[EnumsProtocol::ERROR]['error_msg']);
             }
 
             $this->data = $decodedData[EnumsProtocol::RESPONSE] ?? null;

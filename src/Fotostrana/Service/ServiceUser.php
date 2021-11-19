@@ -240,7 +240,7 @@ class ServiceUser extends ServiceAbstract
         return  $this->requestFotostranaApi(
             'User.sendNotification',
             [
-                EnumsProtocol::USER_IDS => $userIds,
+                EnumsProtocol::USER_IDS => implode(',',$userIds),
                 EnumsProtocol::TEXT => $text,
                 EnumsProtocol::PARAMS => $params,
             ]
