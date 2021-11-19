@@ -5,6 +5,7 @@ use Fotostrana\Enums\EnumsConfig;
 use Fotostrana\Enums\EnumsProtocol;
 
 use Fotostrana\Model\ModelAuth;
+use Fotostrana\Model\ModelCreds;
 
 /**
  * This class will generate URL and sig for api request
@@ -46,8 +47,8 @@ class SubRequest
             }
         }
 
-        $p_string .= in_array($params['method'], $this->server_methods) ? EnumsConfig::FOTOSTRANA_SERVERKEY
-                                                                                      : EnumsConfig::FOTOSTRANA_CLIENTKEY;
+        $p_string .= in_array($params['method'], $this->server_methods) ? ModelCreds::serverKey()
+                                                                                      : ModelCreds::clientKey();
 
         if (EnumsConfig::FOTOSTRANA_DEBUG) {
             echo "p_string: " . $p_string . "<br/><br/>\n";
@@ -85,7 +86,7 @@ class SubRequest
     private function preparePOST(array $params)
     {
         $paramsForSig = [
-            EnumsProtocol::APP_ID => EnumsConfig::FOTOSTRANA_APPID,
+            EnumsProtocol::APP_ID => ModelCreds::appId(),
             EnumsProtocol::TIMESTAMP => time(),
             EnumsProtocol::FORMAT => 1,
             EnumsProtocol::RAND => rand(1,999999),
@@ -112,7 +113,7 @@ class SubRequest
     private function prepareGET(array $params)
     {
         if (!array_key_exists(EnumsProtocol::APP_ID, $params)) {
-            $params[EnumsProtocol::APP_ID] = EnumsConfig::FOTOSTRANA_APPID;
+            $params[EnumsProtocol::APP_ID] = ModelCreds::appId();
         }
 
         if (!array_key_exists(EnumsProtocol::TIMESTAMP, $params)) {

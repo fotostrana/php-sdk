@@ -6,11 +6,6 @@ namespace Fotostrana\Enums;
 
 class EnumsConfig
 {
-    // create app on FS and add this settings from admin-panel
-    const FOTOSTRANA_APPID = '';
-    const FOTOSTRANA_CLIENTKEY = '';
-    const FOTOSTRANA_SERVERKEY = '';
-
     const FOTOSTRANA_API_BASEURL = 'http://www.fotostrana.ru/apifs.php';
 
     // diff debugging params

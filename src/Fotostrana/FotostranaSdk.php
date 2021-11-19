@@ -3,6 +3,7 @@ namespace Fotostrana;
 
 // Different
 use Fotostrana\Interfaces\IError;
+use Fotostrana\Model\ModelCreds;
 use Fotostrana\Request\RequestBase;
 
 // Services
@@ -24,8 +25,13 @@ class FotostranaSdk implements IError
     /** @var ModelAuth */
     private $authParams;
 
-    public function __construct()
+    public function __construct(
+        string $appId,
+        string $serverKey,
+        string $clientKey
+    )
     {
+        new ModelCreds($appId, $serverKey, $clientKey);
         $this->selfTest();
         $this->checkAuth();
         $this->flushCache();

@@ -37,7 +37,7 @@ class ModelAuth implements IError
 
 
 
-        $ourAuth = md5(EnumsConfig::FOTOSTRANA_APPID . '_' . $this->viewerId . '_' . EnumsConfig::FOTOSTRANA_SERVERKEY);
+        $ourAuth = md5(ModelCreds::appId() . '_' . $this->viewerId . '_' . ModelCreds::serverKey());
         if (EnumsConfig::FOTOSTRANA_AUTH_KEY_CHECK && ($this->authKey === null || $this->authKey != $ourAuth)) {
             $this->error = new ModelError('002');
             return;
