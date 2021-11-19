@@ -90,10 +90,16 @@ class SubRequest
             EnumsProtocol::TIMESTAMP => time(),
             EnumsProtocol::FORMAT => 1,
             EnumsProtocol::RAND => rand(1,999999),
-            EnumsProtocol::SESSION_KEY => $this->authParams->sessionKey(),
-            EnumsProtocol::VIEWER_ID => $this->authParams->viewerId(),
             EnumsProtocol::METHOD => $params[EnumsProtocol::METHOD],
         ];
+
+        if ($sessionKey = $this->authParams->sessionKey()) {
+            $paramsForSig[EnumsProtocol::SESSION_KEY] = $sessionKey;
+        }
+
+        if ($viewerId = $this->authParams->viewerId()) {
+            $paramsForSig[EnumsProtocol::VIEWER_ID] = $viewerId;
+        }
 
         ksort($paramsForSig);
         $sig = $this->makeSig($paramsForSig);
@@ -128,9 +134,12 @@ class SubRequest
             $params[EnumsProtocol::RAND] = rand(1,999999);
         }
 
-        if (!in_array($params[EnumsProtocol::METHOD], $this->server_methods)) {
-            $params[EnumsProtocol::SESSION_KEY] = $this->authParams->sessionKey();
-            $params[EnumsProtocol::VIEWER_ID] = $this->authParams->viewerId();
+        if ($sessionKey = $this->authParams->sessionKey()) {
+            $params[EnumsProtocol::SESSION_KEY] = $sessionKey;
+        }
+
+        if ($viewerId = $this->authParams->viewerId()) {
+            $params[EnumsProtocol::VIEWER_ID] = $viewerId;
         }
 
         ksort($params);

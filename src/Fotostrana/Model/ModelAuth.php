@@ -26,19 +26,20 @@ class ModelAuth implements IError
 
     public function __construct()
     {
-        $this->sessionKey = $_REQUEST[EnumsProtocol::SESSION_KEY] ?? null;
-        $this->viewerId   = $_REQUEST[EnumsProtocol::VIEWER_ID] ?? null;
-        $this->authKey    = $_REQUEST[EnumsProtocol::AUTH_KEY] ?? null;
+        $this->sessionKey = $_REQUEST[EnumsProtocol::SESSION_KEY] ?? '';
+        $this->viewerId   = $_REQUEST[EnumsProtocol::VIEWER_ID] ?? '';
+        $this->authKey    = $_REQUEST[EnumsProtocol::AUTH_KEY] ?? '';
 
-        if (!$this->sessionKey || !$this->viewerId) {
-            $this->error = new ModelError('002');
+        if (!EnumsConfig::FOTOSTRANA_AUTH_KEY_CHECK) {
             return;
         }
 
-
+        if (!$this->sessionKey && !$this->viewerId && !$this->authKey) {
+            return;
+        }
 
         $ourAuth = md5(ModelCreds::appId() . '_' . $this->viewerId . '_' . ModelCreds::serverKey());
-        if (EnumsConfig::FOTOSTRANA_AUTH_KEY_CHECK && ($this->authKey === null || $this->authKey != $ourAuth)) {
+        if (($this->authKey === null || $this->authKey != $ourAuth)) {
             $this->error = new ModelError('002');
             return;
         }
