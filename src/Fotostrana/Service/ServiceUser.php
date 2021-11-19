@@ -223,10 +223,24 @@ class ServiceUser extends ServiceAbstract
      */
     function sendNotification(int $userId, string $text, array $params) : ModelRequestResponse
     {
+        return  $this->sendNotificationMulti([$userId], $text, $params);
+    }
+
+    /**
+     * Users Ids limit is 1000 per request
+     *
+     * @param array $userIds
+     * @param string $text
+     * @param array $params
+     * @return ModelRequestResponse
+     * @throws ModelError
+     */
+    public function sendNotificationMulti(array $userIds, string $text, array $params) : ModelRequestResponse
+    {
         return  $this->requestFotostranaApi(
             'User.sendNotification',
             [
-                EnumsProtocol::USER_IDS => $userId,
+                EnumsProtocol::USER_IDS => $userIds,
                 EnumsProtocol::TEXT => $text,
                 EnumsProtocol::PARAMS => $params,
             ]

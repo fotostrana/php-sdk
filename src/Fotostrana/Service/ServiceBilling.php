@@ -56,18 +56,27 @@ class ServiceBilling extends ServiceAbstract
      */
     public function getAppBalance() : ModelRequestResponse
     {
-        $response = $this->requestFotostranaApi('Billing.getAppBalance',[],false);
-        if ($response->error()) {
-            return $response;
-        }
+        return $this->requestFotostranaApi(
+            'Billing.getAppBalance',
+            [],
+            false
+        );
+    }
 
-        if (($balance = $response->data()['balance'] ?? null) === null) {
-            $response->setError(
-                new ModelError('Billing',"Billing problem: No correct result found.")
-            );
-        }
-
-        return $response;
+    /**
+     * @var int $userId
+     * @return ModelRequestResponse
+     * @throws ModelError
+     */
+    public function getUserBalance(int $userId) : ModelRequestResponse
+    {
+        return $this->requestFotostranaApi(
+            'Billing.getUserBalanceAny',
+            [
+                EnumsProtocol::USER_ID => $userId
+            ],
+            false
+        );
     }
 
 }
