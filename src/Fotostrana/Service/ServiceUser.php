@@ -217,13 +217,13 @@ class ServiceUser extends ServiceAbstract
     /**
      * @param int $userId
      * @param string $text
-     * @param array $params
+     * @param string $urlParams
      * @return ModelRequestResponse
      * @throws ModelError
      */
-    function sendNotification(int $userId, string $text, array $params) : ModelRequestResponse
+    function sendNotification(int $userId, string $text, string $urlParams) : ModelRequestResponse
     {
-        return  $this->sendNotificationMulti([$userId], $text, $params);
+        return  $this->sendNotificationMulti([$userId], $text, $urlParams);
     }
 
     /**
@@ -231,18 +231,18 @@ class ServiceUser extends ServiceAbstract
      *
      * @param array $userIds
      * @param string $text
-     * @param array $params
+     * @param string $urlParams
      * @return ModelRequestResponse
      * @throws ModelError
      */
-    public function sendNotificationMulti(array $userIds, string $text, array $params) : ModelRequestResponse
+    public function sendNotificationMulti(array $userIds, string $text, string $urlParams) : ModelRequestResponse
     {
         return  $this->requestFotostranaApi(
             'User.sendNotification',
             [
                 EnumsProtocol::USER_IDS => implode(',',$userIds),
                 EnumsProtocol::TEXT => $text,
-                EnumsProtocol::PARAMS => $params,
+                EnumsProtocol::PARAMS => $urlParams,
             ]
         );
     }
