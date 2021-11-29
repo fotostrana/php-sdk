@@ -25,5 +25,6 @@ class EnumsProtocol
         TIMESTAMP   = 'timestamp',
         ERROR       = 'error',
         SIG         = 'sig',
-        RESPONSE    = 'response';
+        RESPONSE    = 'response',
+        ACTION_ID   = 'actionId';
 }

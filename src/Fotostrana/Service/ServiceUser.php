@@ -246,4 +246,14 @@ class ServiceUser extends ServiceAbstract
             ]
         );
     }
+
+    public function traceEvent(int $userId, string $actionId)
+    {
+        return $this->requestFotostranaApi(
+            'User.traceAction',
+            [EnumsProtocol::USER_ID => $userId,EnumsProtocol::ACTION_ID => $actionId,],
+            true,
+            EnumsProtocol::HTTP_QUERY_POST
+        );
+    }
 }
