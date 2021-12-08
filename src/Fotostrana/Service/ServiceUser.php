@@ -243,7 +243,9 @@ class ServiceUser extends ServiceAbstract
                 EnumsProtocol::USER_IDS => implode(',',$userIds),
                 EnumsProtocol::TEXT => $text,
                 EnumsProtocol::PARAMS => $urlParams,
-            ]
+            ],
+            true,
+            EnumsProtocol::HTTP_QUERY_POST
         );
     }
 
